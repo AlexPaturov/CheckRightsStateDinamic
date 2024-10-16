@@ -1,0 +1,48 @@
+﻿@page "/"
+@inject GetUserRights userRights
+
+<ul class="list-group">
+
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Проверка домена metinvest.ua
+        <span class="badge bg-secondary">Ожидает</span>
+    </li>
+
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Проверка LDAP
+        <span class="badge bg-success">Проверено</span>
+    </li>
+
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Проверка прав ПК
+        <span class="badge bg-danger">Ошибка</span>
+    </li>
+
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Проверка прав пользователя
+        <span class="badge bg-info">Проверяется</span>
+    </li>
+
+</ul>
+
+@code{
+    private string pcName = Environment.MachineName;
+    private string userName = Environment.UserDomainName;
+    private string domainName = "mix.ua";
+    private string ldapName = "LDAP://mix.ua";
+
+    private bool UserRights = false;
+    private bool PcRights = false;
+    private bool DomainMetinvest = false;
+    private bool LdapAccess = false;
+
+
+    protected override async void OnInitialized() 
+    {
+        UserRights = await userRights.CheckUserRights(userName);
+        PcRights = await userRights.CheckPcRights(pcName);
+        DomainMetinvest = await userRights.CheckDomainMetinvest(domainName);
+        LdapAccess = await userRights.CheckLdapAccess(ldapName);
+        
+    }
+}
