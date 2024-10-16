@@ -4,12 +4,20 @@
 <ul class="list-group">
     <li class="list-group-item d-flex justify-content-between align-items-center">
         Проверка прав ПК
-        <span class="badge @PcRightsBadge">@PcRightsMessage</span>
+        <span class="badge @PcRightsBadge">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                  style="@((PcRightsBadge == "bg-info") ? "" : "display:none")"></span>
+            ПК: @PcRightsMessage
+        </span>
     </li>
 
     <li class="list-group-item d-flex justify-content-between align-items-center">
         Проверка прав пользователя
-        <span class="badge @UserRightsBadge">@UserRightsMessage</span>
+        <span class="badge @UserRightsBadge">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                  style="@((UserRightsBadge == "bg-info") ? "" : "display:none")"></span>
+            Пользователь: @UserRightsMessage
+        </span>
     </li>
 </ul>
 
@@ -41,7 +49,7 @@
             if (PcRights == true)
             {
                 PcRightsBadge = "bg-success";
-                PcRightsMessage = "Успешно";
+                PcRightsMessage = "Проверено: Успешно";
             }
             else
             {
@@ -67,7 +75,7 @@
             if (UserRights == true)
             {
                 UserRightsBadge = "bg-success";
-                UserRightsMessage = "Успешно";
+                UserRightsMessage = "Проверено: Успешно";
             }
             else
             {
