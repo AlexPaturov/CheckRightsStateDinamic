@@ -4,18 +4,22 @@
 <ul class="list-group">
     <li class="list-group-item d-flex justify-content-between align-items-center">
         Проверка прав ПК
-        <span class="badge @PcRightsBadge">
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                  style="@((PcRightsBadge == "bg-info") ? "" : "display:none")"></span>
+        <span class="badge @PcRightsBadge badge-with-spinner">
+            @if (IsPcRightsChecking)
+            {
+                <span class="@($"spinner-border spinner-border-sm {(PcRightsBadge == "bg-info" ? "" : "spinner-hidden")}")" role="status" aria-hidden="true"></span>
+            }
             ПК: @PcRightsMessage
         </span>
     </li>
 
     <li class="list-group-item d-flex justify-content-between align-items-center">
         Проверка прав пользователя
-        <span class="badge @UserRightsBadge">
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                  style="@((UserRightsBadge == "bg-info") ? "" : "display:none")"></span>
+        <span class="badge @UserRightsBadge badge-with-spinner">
+            @if (IsUserRightsChecking)
+            {
+                <span class="@($"spinner-border spinner-border-sm {(UserRightsBadge == "bg-info" ? "" : "spinner-hidden")}")" role="status" aria-hidden="true"></span>
+            }
             Пользователь: @UserRightsMessage
         </span>
     </li>
@@ -36,9 +40,14 @@
     private string PcRightsBadge = "bg-secondary";
     private string UserRightsBadge = "bg-secondary";
 
+    // Flags to control spinner visibility
+    private bool IsPcRightsChecking = false;
+    private bool IsUserRightsChecking = false;
+
     protected override async void OnInitialized()
     {
         // Check PC Rights
+        IsPcRightsChecking = true;
         PcRightsBadge = "bg-info"; // Checking
         PcRightsMessage = "Проверяется";
         StateHasChanged(); // Trigger re-render
@@ -62,9 +71,12 @@
             PcRightsBadge = "bg-danger";
             PcRightsMessage = "Ошибка при проверке";
         }
+
+        IsPcRightsChecking = false; // Hide spinner after check completes
         StateHasChanged(); // Re-render to update PC rights
 
         // Check User Rights
+        IsUserRightsChecking = true;
         UserRightsBadge = "bg-info"; // Checking
         UserRightsMessage = "Проверяется";
         StateHasChanged(); // Trigger re-render
@@ -88,6 +100,8 @@
             UserRightsBadge = "bg-danger";
             UserRightsMessage = "Ошибка при проверке";
         }
+
+        IsUserRightsChecking = false; // Hide spinner after check completes
         StateHasChanged(); // Re-render to update user rights
     }
 }

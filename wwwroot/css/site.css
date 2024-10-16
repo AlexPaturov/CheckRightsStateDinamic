@@ -62,3 +62,17 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+/* Define a class for the badge layout with spinner */
+.badge-with-spinner {
+    min-width: 120px;
+    display: flex;
+    justify-content: center; /* Centers text and spinner horizontally */
+    align-items: center; /* Centers text and spinner vertically */
+    gap: 0.5rem; /* Adds spacing between spinner and text */
+}
+
+/* Hide the spinner when it's not needed */
+.spinner-hidden {
+    visibility: hidden;
+}
