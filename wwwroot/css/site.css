@@ -65,14 +65,15 @@ a, .btn-link {
 
 /* Define a class for the badge layout with spinner */
 .badge-with-spinner {
-    min-width: 120px;
     display: flex;
-    justify-content: center; /* Centers text and spinner horizontally */
-    align-items: center; /* Centers text and spinner vertically */
-    gap: 0.5rem; /* Adds spacing between spinner and text */
+    justify-content: center;    /* Center content horizontally */
+    align-items: center;        /* Center content vertically */
+    gap: 0.5rem;                /* Add space between spinner and text */
+    width: 250px;               /* Fixed width for the badge */
+    height: 30px;               /* Fixed height for the badge */
 }
 
 /* Hide the spinner when it's not needed */
 .spinner-hidden {
-    visibility: hidden;
+    visibility: hidden;         /* Keep the spinner space, but hide it */
 }
