@@ -2,47 +2,84 @@
 @inject GetUserRights userRights
 
 <ul class="list-group">
-
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-        Проверка домена metinvest.ua
-        <span class="badge bg-secondary">Ожидает</span>
-    </li>
-
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-        Проверка LDAP
-        <span class="badge bg-success">Проверено</span>
-    </li>
-
     <li class="list-group-item d-flex justify-content-between align-items-center">
         Проверка прав ПК
-        <span class="badge bg-danger">Ошибка</span>
+        <span class="badge @PcRightsBadge">@PcRightsMessage</span>
     </li>
 
     <li class="list-group-item d-flex justify-content-between align-items-center">
         Проверка прав пользователя
-        <span class="badge bg-info">Проверяется</span>
+        <span class="badge @UserRightsBadge">@UserRightsMessage</span>
     </li>
-
 </ul>
 
-@code{
+@code {
     private string pcName = Environment.MachineName;
     private string userName = Environment.UserDomainName;
-    private string domainName = "mix.ua";
-    private string ldapName = "LDAP://mix.ua";
 
-    private bool UserRights = false;
-    private bool PcRights = false;
-    private bool DomainMetinvest = false;
-    private bool LdapAccess = false;
+    private bool? UserRights = null;
+    private bool? PcRights = null;
 
+    // Status messages
+    private string PcRightsMessage = "Ожидает проверки";
+    private string UserRightsMessage = "Ожидает проверки";
 
-    protected override async void OnInitialized() 
+    // CSS classes for badges
+    private string PcRightsBadge = "bg-secondary";
+    private string UserRightsBadge = "bg-secondary";
+
+    protected override async void OnInitialized()
     {
-        UserRights = await userRights.CheckUserRights(userName);
-        PcRights = await userRights.CheckPcRights(pcName);
-        DomainMetinvest = await userRights.CheckDomainMetinvest(domainName);
-        LdapAccess = await userRights.CheckLdapAccess(ldapName);
-        
+        // Check PC Rights
+        PcRightsBadge = "bg-info"; // Checking
+        PcRightsMessage = "Проверяется";
+        StateHasChanged(); // Trigger re-render
+
+        try
+        {
+            PcRights = await userRights.CheckPcRights(pcName);
+            if (PcRights == true)
+            {
+                PcRightsBadge = "bg-success";
+                PcRightsMessage = "Успешно";
+            }
+            else
+            {
+                PcRightsBadge = "bg-danger";
+                PcRightsMessage = "Ошибка проверки";
+            }
+        }
+        catch
+        {
+            PcRightsBadge = "bg-danger";
+            PcRightsMessage = "Ошибка при проверке";
+        }
+        StateHasChanged(); // Re-render to update PC rights
+
+        // Check User Rights
+        UserRightsBadge = "bg-info"; // Checking
+        UserRightsMessage = "Проверяется";
+        StateHasChanged(); // Trigger re-render
+
+        try
+        {
+            UserRights = await userRights.CheckUserRights(userName);
+            if (UserRights == true)
+            {
+                UserRightsBadge = "bg-success";
+                UserRightsMessage = "Успешно";
+            }
+            else
+            {
+                UserRightsBadge = "bg-danger";
+                UserRightsMessage = "Ошибка проверки";
+            }
+        }
+        catch
+        {
+            UserRightsBadge = "bg-danger";
+            UserRightsMessage = "Ошибка при проверке";
+        }
+        StateHasChanged(); // Re-render to update user rights
     }
 }
